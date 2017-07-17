@@ -1,0 +1,17 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Roundcube\\Plugins\\ComposeJaMessage\\": "src/"
+        }
+    },
+    "require": {
+        "ext-mbstring": "^7.1",
+        "php": "^7.1",
+        "yosymfony/toml": "^0.3.3"
+    },
+    "require-dev": {
+        "pear/mail_mime": "^1.10",
+        "phpunit/phpunit": "^6.2",
+        "squizlabs/php_codesniffer": "^3.0"
+    }
+}

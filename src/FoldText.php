@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Roundcube\Plugins;
+namespace Roundcube\Plugins\ComposeJaMessage;
 
 class FoldText
 {
