@@ -1,0 +1,24 @@
+head_encoding:
+    - key: JISX0208
+      charset: ISO-2022-JP
+      encoding: base64
+    - key: UTF-8
+      charset: UTF-8
+      encoding: quoted-printable
+
+text_encoding:
+    - key: US-ASCII
+      charset: US-ASCII
+      transfer_encoding: 7bit
+      format: flowed
+      delsp: "no"
+    - key: JISX0208
+      charset: ISO-2022-JP
+      transfer_encoding: 7bit
+      format: flowed
+      delsp: "yes"
+    - key: UTF-8
+      charset: UTF-8
+      transfer_encoding: 8bit
+      format: flowed
+      delsp: "yes"

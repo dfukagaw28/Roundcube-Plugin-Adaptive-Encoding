@@ -1,17 +1,50 @@
 {
+    "name": "dfkgw/adaptive_encoding",
+    "type": "roundcube-plugin",
+    "description": "Customize setting for character encodings, transfer encoding, flowed text, etc. on sending messages",
+    "license": "MIT",
+    "keywords": ["mail", "compose", "charset", "encoding"],
+    "authors": [
+        {
+            "name": "Daiji Fukagawa",
+            "email": "dfukagaw28@gmail.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
-            "Roundcube\\Plugins\\ComposeJaMessage\\": "src/"
+            "dfkgw\\AdaptiveEncoding\\": "src/"
         }
     },
     "require": {
-        "ext-mbstring": "^7.1",
+        "dfkgw/mime-fold-flowed-text": "*",
+        "dfkgw/mail-mime-ex": "*",
         "php": "^7.1",
-        "yosymfony/toml": "^0.3.3"
+        "roundcube/plugin-installer": ">=0.1.6",
+        "symfony/yaml": "^3.3"
     },
     "require-dev": {
-        "pear/mail_mime": "^1.10",
+        "friendsofphp/php-cs-fixer": "^2.4",
+        "phpmd/phpmd": "^2.6",
         "phpunit/phpunit": "^6.2",
         "squizlabs/php_codesniffer": "^3.0"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://plugins.roundcube.net"
+        },
+        {
+            "type": "vcs",
+            "url": "https://tiramis2.doshisha.ac.jp/gogs/daiji/pear-Mail_Mime-Ex.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://tiramis2.doshisha.ac.jp/gogs/daiji/MIME-Fold-Flowed-Text.git"
+        }
+    ],
+    "extra": {
+        "roundcube": {
+            "min-version": "1.3.0"
+        }
     }
 }

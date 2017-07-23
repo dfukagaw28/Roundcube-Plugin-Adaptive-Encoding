@@ -1,105 +1,130 @@
 <?php
 declare(strict_types=1);
 
-namespace Roundcube\Plugins\ComposeJaMessage;
+namespace dfkgw\AdaptiveEncoding;
 
-use Yosymfony\Toml\Toml;
+use \Symfony\Component\Yaml\Yaml;
+use \dfkgw\MailMimeEx\MailMimeEx;
+use \dfkgw\MimeFoldFlowedText\FlowingText;
 
 class PriorityEncodingList
 {
-    private $head_encodings;
-    private $text_encodings;
-    private $legacyRecipientRules;
+    public $preferences;
+    public $legacyRecipientRules;
 
-    public function __construct()
+    public function __construct(string $configFile='')
     {
-        $this->loadConfig(__DIR__ . '/config.toml');
+        $this->preferences = [];
+        if (empty($configFile)) {
+            $configFile = __DIR__ . '/config.yml';
+        }
+        $this->loadConfig($configFile);
     }
 
-    private function loadConfig(string $filepath)
+    protected function loadConfig(string $filepath)
     {
-        $config = Toml::Parse($filepath);
-        
-        foreach ($config["head_encodings"] as $item) {
-            $key = $item["key"];
-            $val = $item;
-            $this->head_encodings[$key] = $val;
+        $config = (array) Yaml::parse(file_get_contents($filepath));
+
+        $defaultOptions = [
+            'head_encoding' => [
+                'charset' => null,
+                'encoding' => null
+            ],
+            'text_encoding' => [
+                'charset' => null,
+                'transfer_encoding' => null,
+                'format' => null,
+                'delsp' => null
+            ]
+        ];
+
+        foreach (['head_encoding', 'text_encoding'] as $prefKey) {
+            $list = [];
+            if (array_key_exists($prefKey, $config)) {
+                $options = (array) $config[$prefKey];
+                foreach ($options as $option) {
+                    $key = $option['key'];
+                    $list[$key] = $option + $defaultOptions[$prefKey];
+                }
+            }
+            $this->preferences[$prefKey] = $list;
         }
 
-        foreach ($config["text_encodings"] as $item) {
-            $key = $item["key"];
-            $val = $item;
-            $this->text_encodings[$key] = $val;
+        if (array_key_exists('legacyRecipientRule', $config)) {
+            $this->legacyRecipientRules = (array) $config['legacyRecipientRule'];
+        } else {
+            $this->legacyRecipientRules = [];
         }
-
-        $this->legacyRecipientRules[$key] = $config["legacyRecipientRules"];
     }
 
-    public function guessHeaderCharset(MyMailMIME $message)
+    public function updateHeaderEncoding(MailMimeEx $message)
     {
         $text = join('', $message->getRawHeaders());
         $current_charset = $message->getHeaderCharset();
 
-        $this->tryHeaderCharsets($text, $current_charset);
+        $original_encoding = mb_internal_encoding();
+        mb_internal_encoding($current_charset);
 
-        $option = $this->getFirstHeadEncoding();
-        $new_charset = $option["charset"];
-
-        $message->updateHeaderCharset($new_charset, $current_charset);
-
-        $message->updateParam('head_encoding', $option["encoding"]);
+        $options = $this->preferences['head_encoding'];
+        $option = $this->tryCharsets($options, $text);
+        if ($option) {
+            $message->setParam('head_encoding', $option['encoding']);
+            $message->updateHeaderCharset($option['charset']);
+            //$message->setParam('head_charset', $option['charset']);
+            $message->setHeaders([]);
+        }
+        mb_internal_encoding($original_encoding);
     }
 
-    public function guessTextCharset(MyMailMIME $message)
+    public function updateTextEncoding(MailMimeEx $message)
     {
-        $text = $message->message->getTXTBody();
+        $text = $message->getTextBody();
         $current_charset = $message->getTextCharset();
 
-        $this->tryTextCharsets($text, $current_charset);
+        $original_encoding = mb_internal_encoding();
+        mb_internal_encoding($current_charset);
 
-        $option = $this->getFirstTextEncoding();
-        $new_charset = $option["charset"];
+        $options = $this->preferences['text_encoding'];
+        $option = $this->tryCharsets($options, $text);
+        if ($option) {
+            $message->setParam('text_encoding', $option['transfer_encoding']);
+            $message->setOption('format', $option['format']);
+            $message->setOption('delsp', $option['delsp']);
+            $message->updateTextCharset($option['charset']);
+            //$message->setParam('text_charset', $option['charset']);
+            $message->setHeaders([]);
 
-        $message->updateTextCharset($new_charset, $current_charset);
-
-        $message->updateParam('text_encoding', $option["transfer_encoding"]);
+            // Update flowed lines
+            $encoding = $option['charset'];
+            $text = $message->getTextBody();
+            $width = 78;
+            $delsp = true;
+            $text = FlowingText::fold($text, $width, $encoding, $delsp);
+            $message->setTextBody($text);
+        }
+        mb_internal_encoding($original_encoding);
     }
 
-    private function getFirstHeadEncoding()
-    {
-        return Util::getFirstValue($this->head_encodings);
-    }
-
-    private function getFirstTextEncoding()
-    {
-        return Util::getFirstValue($this->text_encodings);
-    }
-
-    private function tryHeaderCharsets(string $text, string $current_charset)
-    {
-        self::tryCharsets($this->head_encodings, $text, $current_charset);
-    }
-
-    private function tryTextCharsets(string $text, string $current_charset)
-    {
-        self::tryCharsets($this->text_encodings, $text, $current_charset);
-    }
-
-    private static function tryCharsets(array &$options, string $text, string $current_charset)
+    /**
+     *  Find a character encoding which is applicable to the given text
+     */
+    protected static function tryCharsets(array &$options, string $text)
     {
         foreach ($options as $key => $option) {
             $new_charset = $option["charset"];
-            if (self::tryCharset($text, $new_charset, $current_charset)) {
-                break;
+            if (self::tryCharset($text, $new_charset)) {
+                return $option;
             } else {
                 unset($options[$key]);
             }
         }
+        return null;
     }
 
-    private static function tryCharset(string $text0, string $new_charset, string $current_charset)
+    protected static function tryCharset(string $text0, string $new_charset)
     {
         try {
+            $current_charset = mb_internal_encoding();
             $text1 = mb_convert_encoding($text0, $new_charset, $current_charset);
             $text2 = mb_convert_encoding($text1, $current_charset, $new_charset);
             if (strcmp($text0, $text2) == 0) {
@@ -122,15 +147,15 @@ class PriorityEncodingList
         $headers = $message->getRawHeaders();
         $legacy = $this->matchRules($headers, $this->legacyRecipientRules);
         if ($legacy) {
-            unset($this->head_encodings['UTF-8']);
-            unset($this->text_encodings['UTF-8']);
+            unset($this->preferences['head_encoding']['UTF-8']);
+            unset($this->preferences['text_encoding']['UTF-8']);
         }
     }
 
     /**
      * Check if the mail header matches some of the given rules
      */
-    private static function matchRules(string $headers, array $rules): bool
+    protected static function matchRules(string $headers, array $rules): bool
     {
         foreach ($rules as $rule) {
             try {

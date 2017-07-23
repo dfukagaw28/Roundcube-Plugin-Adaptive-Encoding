@@ -1,0 +1,16 @@
+head_encoding:
+    - key: UTF-8
+      charset: UTF-8
+      encoding: quoted-printable
+
+text_encoding:
+    - key: US-ASCII
+      charset: US-ASCII
+      transfer_encoding: 7bit
+      format: flowed
+      delsp: "no"
+    - key: UTF-8
+      charset: UTF-8
+      transfer_encoding: 8bit
+      format: flowed
+      delsp: "no"

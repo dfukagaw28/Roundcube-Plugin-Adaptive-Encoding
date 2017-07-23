@@ -1,0 +1,55 @@
+###
+### config.yml
+###
+### Configuration file for Roundcube-Plugin-Compose-Ja-Message
+###
+### (C) 2017 Daiji Fukagawa All rights reserved
+###
+
+### Priority list of encodings for MIME Header Part
+head_encoding: !!omap
+    US-ASCII:
+        - charset: US-ASCII
+          encoding: quoted-printable
+    JIS:
+        - charset: ISO-2022-JP
+          encoding: base64
+    UTF-8:
+        - charset: UTF-8
+          encoding: base64
+    default:
+        - charset: ISO-8859-1
+          encoding: quoted-printable
+
+### Priority list of encodings for Message Body Part
+### (Content-Type charset)
+text_encoding: !!omap
+    US-ASCII:
+        - charset: US-ASCII
+          transfer_encoding: 7bit
+          format: flowed
+          delsp: "no"
+    JIS:
+        - charset: ISO-2022-JP
+          transfer_encoding: 7bit
+          format: flowed
+          delsp: "yes"
+    UTF-8:
+        - charset: UTF-8
+          transfer_encoding: 8bit
+          format: flowed
+          delsp: "yes"
+    default:
+        - charset: ISO-8859-1
+          transfer_encoding: quoted-printable
+          format: flowed
+          delsp: "no"
+
+### Rules to check if a recipient is "legacy" or not
+legacyRecipientRules:
+    - key: To
+      pattern: "/john@example\\.com/"
+    - key: Bcc
+      pattern: "/@legacy\\.example\\.co\\.jp/"
+    - key: To
+      pattern: "/LEGACYLEGACY/"
