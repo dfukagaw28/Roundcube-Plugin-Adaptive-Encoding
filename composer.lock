@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "39ddc1bdab7e54b86cf8f946a8799274",
+    "content-hash": "075562c579db061112c8bd3cb170e2c5",
     "packages": [
         {
             "name": "dfkgw/mail-mime-ex",
