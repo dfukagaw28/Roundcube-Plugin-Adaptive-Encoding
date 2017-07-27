@@ -37,9 +37,10 @@ class adaptive_encoding extends rcube_plugin
     public function updateEncodings($params)
     {
         $message = new MailMimeEx($params['message']);
+        $headers = $message->getRawHeaders();
 
         // Check legacy recipients who are not compliant with UTF-8
-        $this->customSetting->checkLegacyRecipients();
+        $this->customSetting->checkLegacyRecipients($headers);
 
         // Check and update capable encodings
         $this->customSetting->updateHeaderCharset($message);

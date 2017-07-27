@@ -142,9 +142,8 @@ class PriorityEncodingList
      * Check if recipients are compliant with UTF8 or not
      * (using BLACKLIST)
      */
-    public function checkLegacyRecipients()
+    public function checkLegacyRecipients(array $headers)
     {
-        $headers = $message->getRawHeaders();
         $legacy = $this->matchRules($headers, $this->legacyRecipientRules);
         if ($legacy) {
             unset($this->preferences['head_encoding']['UTF-8']);
@@ -155,7 +154,7 @@ class PriorityEncodingList
     /**
      * Check if the mail header matches some of the given rules
      */
-    protected static function matchRules(string $headers, array $rules): bool
+    protected static function matchRules(array $headers, array $rules): bool
     {
         foreach ($rules as $rule) {
             try {
