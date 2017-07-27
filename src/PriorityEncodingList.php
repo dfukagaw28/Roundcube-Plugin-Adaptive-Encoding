@@ -142,7 +142,7 @@ class PriorityEncodingList
      * Check if recipients are compliant with UTF8 or not
      * (using BLACKLIST)
      */
-    public function checkLegacyRecipients(MyMailMIME $message)
+    public function checkLegacyRecipients()
     {
         $headers = $message->getRawHeaders();
         $legacy = $this->matchRules($headers, $this->legacyRecipientRules);
