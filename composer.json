@@ -16,8 +16,8 @@
         }
     },
     "require": {
-        "dfkgw/mime-fold-flowed-text": "*",
-        "dfkgw/mail-mime-ex": "*",
+        "dfkgw/mime-fold-flowed-text": "@dev",
+        "dfkgw/mail-mime-ex": "@dev",
         "php": "^7.1",
         "roundcube/plugin-installer": ">=0.1.6",
         "symfony/yaml": "^3.3"
