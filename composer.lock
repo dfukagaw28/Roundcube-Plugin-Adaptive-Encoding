@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "075562c579db061112c8bd3cb170e2c5",
+    "content-hash": "d123dcea0c4984dcac0c49c4be6ef531",
     "packages": [
         {
             "name": "dfkgw/mail-mime-ex",
-            "version": "v0.4.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://tiramis2.doshisha.ac.jp/gogs/daiji/pear-Mail_Mime-Ex.git",
-                "reference": "007c77cc42f34299a835d3541c5fe326a42aff49"
+                "reference": "1b9c96ec7aa4e318a58bb4624262c7e0f89e27f2"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -39,23 +39,23 @@
                 }
             ],
             "description": "Decorator for Mail_mime class in pear::Mail_Mime package",
-            "time": "2017-07-21T09:13:41+00:00"
+            "time": "2017-07-27 10:43:32"
         },
         {
             "name": "dfkgw/mime-fold-flowed-text",
-            "version": "v0.3.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://tiramis2.doshisha.ac.jp/gogs/daiji/MIME-Fold-Flowed-Text.git",
-                "reference": "4558128f04446c05cce1cb6d92eb8549fd56e2c5"
+                "reference": "f5593eec747712dc0fba7fbbb54f41d4ebd6dd21"
             },
             "require": {
                 "ext-mbstring": "*"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.4",
-                "phpmd/phpmd": "^2.6",
-                "phpunit/phpunit": "^6.2"
+                "friendsofphp/php-cs-fixer": "*",
+                "phpmd/phpmd": "*",
+                "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
@@ -73,7 +73,7 @@
                 }
             ],
             "description": "Fold/unfold MIME plain text messages (RFC3676)",
-            "time": "2017-07-20T21:11:21+00:00"
+            "time": "2017-07-26 10:34:04"
         },
         {
             "name": "pear/console_getopt",
@@ -375,21 +375,21 @@
     "packages-dev": [
         {
             "name": "doctrine/annotations",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "54cacc9b81758b14e3ce750f205a393d52339e97"
+                "reference": "5beebb01b025c94e93686b7a0ed3edae81fe3e7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/54cacc9b81758b14e3ce750f205a393d52339e97",
-                "reference": "54cacc9b81758b14e3ce750f205a393d52339e97",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5beebb01b025c94e93686b7a0ed3edae81fe3e7f",
+                "reference": "5beebb01b025c94e93686b7a0ed3edae81fe3e7f",
                 "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "doctrine/cache": "1.*",
@@ -398,7 +398,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4.x-dev"
+                    "dev-master": "1.5.x-dev"
                 }
             },
             "autoload": {
@@ -439,36 +439,36 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-02-24T16:22:25+00:00"
+            "time": "2017-07-22T10:58:02+00:00"
         },
         {
             "name": "doctrine/instantiator",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3,<8.0-DEV"
+                "php": "^7.1"
             },
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
                 "ext-pdo": "*",
                 "ext-phar": "*",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "~2.0"
+                "phpunit/phpunit": "^6.2.3",
+                "squizlabs/php_codesniffer": "^3.0.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -493,7 +493,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14T21:17:01+00:00"
+            "time": "2017-07-22T11:58:36+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -3113,7 +3113,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "dfkgw/mime-fold-flowed-text": 20,
+        "dfkgw/mail-mime-ex": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
