@@ -157,15 +157,20 @@ class PriorityEncodingList
     protected static function matchRules(array $headers, array $rules): bool
     {
         foreach ($rules as $rule) {
-            try {
-                $key = $rule[0];
-                $pattern = $rule[1];
-                $value = $headers[$key];
-                if (preg_match($pattern, $value)) {
+            if (is_array($rule)) {
+                $key = $pattern = $value = '';
+                if (array_key_exists('key', $rule)) {
+                    $key = (string)$rule['key'];
+                }
+                if (array_key_exists('pattern', $rule)) {
+                    $pattern = (string)$rule['pattern'];
+                }
+                if (!empty($key) && array_key_exists($key, $headers)) {
+                    $value = (string)$headers[$key];
+                }
+                if (!empty($pattern) && !empty($value) && preg_match($pattern, $value)) {
                     return true;
                 }
-            } catch (Exception $e) {
-                // ignore errors
             }
         }
         return false;

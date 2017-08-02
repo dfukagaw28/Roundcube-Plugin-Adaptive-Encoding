@@ -38,15 +38,15 @@ final class PriorityEncodingListTest extends TestCase
 
     public function testGuessEncoding_config1_long(): void
     {
-        $longText = str_repeat('hi ', 80);
-        $foldedText = join(
-            "\r\n",
-            [
-                'hi' . str_repeat(' hi', 22),
-                str_repeat(' hi', 26),
-                str_repeat(' hi', 26),
-                str_repeat(' hi', 5) . ' ',
-            ]);
+        $longText = str_repeat('hi ', 79) . 'hi';
+        $foldedSubject = str_repeat('hi ', 22) . 'hi' . "\r\n"
+            . str_repeat(' hi', 26) . "\r\n"
+            . str_repeat(' hi', 26) . "\r\n"
+            . str_repeat(' hi', 5);
+        $foldedBody = str_repeat('hi ', 26) . " \r\n"
+            . str_repeat('hi ', 26) . " \r\n"
+            . str_repeat('hi ', 26) . " \r\n"
+            . 'hi hi';
         $message = new MailMimeEx(['Subject' => $longText], $longText);
 
         $config = new PriorityEncodingList(__DIR__ . '/config1.yml');
@@ -58,12 +58,12 @@ final class PriorityEncodingListTest extends TestCase
         $this->assertEquals('text/plain; charset=US-ASCII; format=flowed', $headers['Content-Type']);
         $this->assertEquals('7bit', $headers['Content-Transfer-Encoding']);
         $headers = $message->getHeaders();
-        $this->assertEquals($foldedText, $headers['Subject']);
+        $this->assertEquals($foldedSubject, $headers['Subject']);
         $this->assertEquals('text/plain; charset=US-ASCII; format=flowed', $headers['Content-Type']);
         $this->assertEquals('7bit', $headers['Content-Transfer-Encoding']);
 
         $text = $message->getTextBody();
-        $this->assertEquals($longText, $text);
+        $this->assertEquals($foldedBody, $text);
     }
 
     public function testGuessEncoding_config1_unicode_1(): void
@@ -127,15 +127,15 @@ final class PriorityEncodingListTest extends TestCase
 
     public function testGuessEncoding_config2_long(): void
     {
-        $longText = str_repeat('hi ', 80);
-        $foldedText = join(
-            "\r\n",
-            [
-                'hi' . str_repeat(' hi', 22),
-                str_repeat(' hi', 26),
-                str_repeat(' hi', 26),
-                str_repeat(' hi', 5) . ' ',
-            ]);
+        $longText = str_repeat('hi ', 79) . 'hi';
+        $foldedSubject = str_repeat('hi ', 22) . 'hi' . "\r\n"
+            . str_repeat(' hi', 26) . "\r\n"
+            . str_repeat(' hi', 26) . "\r\n"
+            . str_repeat(' hi', 5);
+        $foldedBody = str_repeat('hi ', 26) . " \r\n"
+            . str_repeat('hi ', 26) . " \r\n"
+            . str_repeat('hi ', 26) . " \r\n"
+            . 'hi hi';
         $message = new MailMimeEx(['Subject' => $longText], $longText);
 
         $config = new PriorityEncodingList(__DIR__ . '/config2.yml');
@@ -147,12 +147,12 @@ final class PriorityEncodingListTest extends TestCase
         $this->assertEquals('text/plain; charset=US-ASCII; format=flowed', $headers['Content-Type']);
         $this->assertEquals('7bit', $headers['Content-Transfer-Encoding']);
         $headers = $message->getHeaders();
-        $this->assertEquals($foldedText, $headers['Subject']);
+        $this->assertEquals($foldedSubject, $headers['Subject']);
         $this->assertEquals('text/plain; charset=US-ASCII; format=flowed', $headers['Content-Type']);
         $this->assertEquals('7bit', $headers['Content-Transfer-Encoding']);
 
         $text = $message->getTextBody();
-        $this->assertEquals($longText, $text);
+        $this->assertEquals($foldedBody, $text);
     }
 
     public function testGuessEncoding_config2_jis_1(): void
@@ -188,6 +188,7 @@ final class PriorityEncodingListTest extends TestCase
             . " =?UTF-8?Q?=E3=81=82=E3=81=82=E3=81=82=E3=81=82=E3=81=82=E3=81=82=E3=81=82?=\r\n"
             . " =?UTF-8?Q?=E3=81=82=E3=81=82=E3=81=82=E3=81=82=E3=81=82=E3=81=82=E3=81=82?=\r\n"
             . " =?UTF-8?Q?=E3=81=82=E3=81=82=E3=81=82=E2=91=A0?=";
+        $longBody = str_repeat('あ', 25) . " \r\n" . str_repeat('あ', 5) . '①';
         $message = new MailMimeEx(['Subject' => $longText], $longText);
 
         $config = new PriorityEncodingList(__DIR__ . '/config2.yml');
@@ -204,6 +205,6 @@ final class PriorityEncodingListTest extends TestCase
         $this->assertEquals('8bit', $headers['Content-Transfer-Encoding']);
 
         $text = $message->getTextBody();
-        $this->assertEquals($longText, $text);
+        $this->assertEquals($longBody, $text);
     }
 }

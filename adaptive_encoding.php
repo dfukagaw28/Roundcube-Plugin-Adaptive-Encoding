@@ -43,8 +43,8 @@ class adaptive_encoding extends rcube_plugin
         $this->customSetting->checkLegacyRecipients($headers);
 
         // Check and update capable encodings
-        $this->customSetting->updateHeaderCharset($message);
-        $this->customSetting->updateTextCharset($message);
+        $this->customSetting->updateHeaderEncoding($message);
+        $this->customSetting->updateTextEncoding($message);
     }
 
     private static function DEBUG_LOG ($x)
