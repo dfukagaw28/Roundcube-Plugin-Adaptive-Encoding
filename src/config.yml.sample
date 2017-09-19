@@ -7,7 +7,7 @@
 ###
 
 ### Priority list of encodings for MIME Header Part
-head_encoding: !!omap
+head_encoding:
     US-ASCII:
         - charset: US-ASCII
           encoding: quoted-printable
@@ -23,7 +23,7 @@ head_encoding: !!omap
 
 ### Priority list of encodings for Message Body Part
 ### (Content-Type charset)
-text_encoding: !!omap
+text_encoding:
     US-ASCII:
         - charset: US-ASCII
           transfer_encoding: 7bit
