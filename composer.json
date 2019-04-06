@@ -37,11 +37,11 @@
         },
         {
             "type": "vcs",
-            "url": "https://gogs.ducis28.net/daiji/pear-Mail_Mime-Ex.git"
+            "url": "https://github.com/dfukagaw28/pear-Mail_Mime-Ex.git"
         },
         {
             "type": "vcs",
-            "url": "https://gogs.ducis28.net/daiji/MIME-Fold-Flowed-Text.git"
+            "url": "https://github.com/dfukagaw28/MIME-Fold-Flowed-Text.git"
         }
     ],
     "extra": {
